@@ -6,13 +6,16 @@
     'include': '#frontmatter'
   },
   {
+    'include': '#jsx-expression-inside-tags'
+  },
+  {
+    'include': '#jsx-expression'
+  },
+  {
     'include': '#component-tag'
   },
   {
     'include': '#html-tag'
-  },
-  {
-    'include': '#jsx-expression'
   },
   {
     'include': 'text.html.basic'
@@ -43,6 +46,7 @@
       '1': 'name': 'punctuation.definition.tag.end.astro'
     'patterns': [
       { 'include': '#tag-attributes' }
+      { 'include': '#jsx-expression-inside-tags' }
     ]
 
   'html-tag':
@@ -56,6 +60,7 @@
       '1': 'name': 'punctuation.definition.tag.end.astro'
     'patterns': [
       { 'include': '#tag-attributes' }
+      { 'include': '#jsx-expression-inside-tags' }
     ]
 
   'tag-attributes':
@@ -77,7 +82,7 @@
     'endCaptures':
       '0': 'name': 'punctuation.section.embedded.end.astro'
     'patterns': [
-      { 'include': 'source.js' }
+      { 'include': 'source.js.jsx' }
     ]
 
   'html-attribute':
@@ -96,12 +101,35 @@
 
   'jsx-expression':
     'name': 'meta.embedded.expression.astro'
-    'begin': '\\{'
+    'begin': '{(?!\\s*\/\*|\\s*\/\/)'
     'beginCaptures':
       '0': 'name': 'punctuation.section.embedded.begin.astro'
-    'end': '\\}'
+    'end': '}'
     'endCaptures':
       '0': 'name': 'punctuation.section.embedded.end.astro'
     'patterns': [
-      { 'include': 'source.js' }
+      { 'include': 'source.js.jsx' }
+    ]
+
+  'jsx-expression-inside-tags':
+    'name': 'meta.embedded.expression.tag.attribute.astro'
+    'begin': '(class|className)\\s*=\\s*{`'
+    'beginCaptures':
+      '0': 'name': 'meta.attribute-with-value.class.html'
+      '1': 'name': 'entity.other.attribute-name.class.html'
+    'end': '`}'
+    'endCaptures':
+      '0': 'name': 'meta.embedded.expression.end.astro'
+    'patterns': [
+      {
+        'match': '\\${([^}]*)}'
+        'name': 'meta.template.expression.js'
+        'captures':
+          '0': 'name': 'entity.name.tag.js'
+          '1': 'name': 'source.js.jsx'
+      },
+      {
+        'match': '[^${}]+'
+        'name': 'string.template.js'
+      }
     ]

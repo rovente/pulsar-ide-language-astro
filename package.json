@@ -1,7 +1,7 @@
 {
   "name": "language-astro",
   "version": "0.1.0",
-  "description": "Supporto per la sintassi di Astro.js in Pulsar",
+  "description": "Support Astro.js sintax in Pulsar",
   "engines": {
     "pulsar": ">=1.0.0",
     "atom": ">=1.0.0"
