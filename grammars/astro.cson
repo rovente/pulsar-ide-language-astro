@@ -9,6 +9,9 @@
     'include': '#jsx-expression-inside-tags'
   },
   {
+    'include': '#jsx-conditional-operators'
+  },
+  {
     'include': '#jsx-expression'
   },
   {
@@ -37,6 +40,10 @@
     'patterns': [
       { 'include': 'source.ts' }
     ]
+
+  'object-key':
+    'match': '([a-zA-Z_$][\\w$]*)\\s*(?=:)'
+    'name': 'variable.other.property.js'
 
   'component-tag':
     'name': 'meta.tag.component.astro'
@@ -132,10 +139,18 @@
         'match': '(client:load|client:idle|client:visible|client:media|client:only|client:visible)'
         'name': 'keyword.control.directive.astro'
       },
-      # Outros diretivas
+      # Altri direttive
       {
         'match': '(transition:animate|transition:name|transition:persist)'
         'name': 'keyword.control.directive.astro'
+      }
+    ]
+
+  'jsx-conditional-operators':
+    'patterns': [
+      {
+        'match': '&&(?!\\=)|\\|\\|(?!\\=)|\\?\\s*(?!\\=)|\\:(?!\\=)'
+        'name': 'keyword.operator.logical.js'
       }
     ]
 
@@ -148,6 +163,8 @@
     'endCaptures':
       '0': 'name': 'punctuation.section.embedded.end.astro'
     'patterns': [
+      { 'include': '#jsx-conditional-operators' }
+      { 'include': '#object-key' }
       { 'include': 'source.js.jsx' }
     ]
 
@@ -174,6 +191,8 @@
     'endCaptures':
       '0': 'name': 'punctuation.section.embedded.end.astro'
     'patterns': [
+      { 'include': '#jsx-conditional-operators' }
+      { 'include': '#object-key' }
       { 'include': 'source.js.jsx' }
     ]
 
