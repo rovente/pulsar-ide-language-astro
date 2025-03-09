@@ -1,0 +1,107 @@
+'scopeName': 'source.astro'
+'name': 'Astro'
+'fileTypes': ['astro']
+'patterns': [
+  {
+    'include': '#frontmatter'
+  },
+  {
+    'include': '#component-tag'
+  },
+  {
+    'include': '#html-tag'
+  },
+  {
+    'include': '#jsx-expression'
+  },
+  {
+    'include': 'text.html.basic'
+  }
+]
+
+'repository':
+  'frontmatter':
+    'name': 'meta.frontmatter.astro'
+    'begin': '\\A---'
+    'beginCaptures':
+      '0': 'name': 'punctuation.definition.frontmatter.begin.astro'
+    'end': '^---'
+    'endCaptures':
+      '0': 'name': 'punctuation.definition.frontmatter.end.astro'
+    'patterns': [
+      { 'include': 'source.ts' }
+    ]
+
+  'component-tag':
+    'name': 'meta.tag.component.astro'
+    'begin': '(<)([A-Z][\\w\\.]*)'
+    'beginCaptures':
+      '1': 'name': 'punctuation.definition.tag.begin.astro'
+      '2': 'name': 'entity.name.tag.component.astro'
+    'end': '(/?>)'
+    'endCaptures':
+      '1': 'name': 'punctuation.definition.tag.end.astro'
+    'patterns': [
+      { 'include': '#tag-attributes' }
+    ]
+
+  'html-tag':
+    'name': 'meta.tag.html.astro'
+    'begin': '(<)([a-z][\\w\\.\\-]*)'
+    'beginCaptures':
+      '1': 'name': 'punctuation.definition.tag.begin.astro'
+      '2': 'name': 'entity.name.tag.html.astro'
+    'end': '(/?>)'
+    'endCaptures':
+      '1': 'name': 'punctuation.definition.tag.end.astro'
+    'patterns': [
+      { 'include': '#tag-attributes' }
+    ]
+
+  'tag-attributes':
+    'patterns': [
+      {
+        'include': '#jsx-attribute'
+      },
+      {
+        'include': '#html-attribute'
+      }
+    ]
+
+  'jsx-attribute':
+    'name': 'meta.attribute.jsx.astro'
+    'begin': '\\{'
+    'beginCaptures':
+      '0': 'name': 'punctuation.section.embedded.begin.astro'
+    'end': '\\}'
+    'endCaptures':
+      '0': 'name': 'punctuation.section.embedded.end.astro'
+    'patterns': [
+      { 'include': 'source.js' }
+    ]
+
+  'html-attribute':
+    'name': 'meta.attribute.html.astro'
+    'match': '([a-zA-Z0-9_-]+)(?:\\s*(=)\\s*(?:(")([^"]*)(")|(\')([^\']*)(\')|([^\\s>]+)))?'
+    'captures':
+      '1': 'name': 'entity.other.attribute-name.astro'
+      '2': 'name': 'punctuation.separator.key-value.astro'
+      '3': 'name': 'punctuation.definition.string.begin.astro'
+      '4': 'name': 'string.quoted.double.astro'
+      '5': 'name': 'punctuation.definition.string.end.astro'
+      '6': 'name': 'punctuation.definition.string.begin.astro'
+      '7': 'name': 'string.quoted.single.astro'
+      '8': 'name': 'punctuation.definition.string.end.astro'
+      '9': 'name': 'string.unquoted.astro'
+
+  'jsx-expression':
+    'name': 'meta.embedded.expression.astro'
+    'begin': '\\{'
+    'beginCaptures':
+      '0': 'name': 'punctuation.section.embedded.begin.astro'
+    'end': '\\}'
+    'endCaptures':
+      '0': 'name': 'punctuation.section.embedded.end.astro'
+    'patterns': [
+      { 'include': 'source.js' }
+    ]

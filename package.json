@@ -1,0 +1,19 @@
+{
+  "name": "language-astro",
+  "version": "0.1.0",
+  "description": "Supporto per la sintassi di Astro.js in Pulsar",
+  "engines": {
+    "pulsar": ">=1.0.0",
+    "atom": ">=1.0.0"
+  },
+  "keywords": [
+    "astro",
+    "astrojs",
+    "syntax",
+    "highlighting"
+  ],
+  "repository": "https://github.com/rovente/pulsar-ide-language-astro",
+  "license": "MIT",
+  "dependencies": {},
+  "main": "./lib/main"
+}
