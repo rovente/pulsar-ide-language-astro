@@ -33,3 +33,63 @@
   'Import Component':
     'prefix': 'import'
     'body': 'import ${1:Component} from "${2:../components/$1.astro}";'
+
+  'React Component':
+    'prefix': 'react'
+    'body': """
+    ---
+    import { ${1:useState} } from 'react';
+    ---
+
+    <${2:div} client:${3:load}>
+      ${4:// Component content}
+    </${2:div}>
+    """
+
+  'Svelte Component':
+    'prefix': 'svelte'
+    'body': """
+    ---
+    import ${1:Component} from '../components/${1:Component}.svelte';
+    ---
+
+    <${1:Component} client:${2:load} ${3:prop}="${4:value}" />
+    """
+
+  'Vue Component':
+    'prefix': 'vue'
+    'body': """
+    ---
+    import ${1:Component} from '../components/${1:Component}.vue';
+    ---
+
+    <${1:Component} client:${2:load} ${3:prop}="${4:value}" />
+    """
+
+  'JSX Expression':
+    'prefix': 'jsx'
+    'body': '{ ${1:expression} }'
+
+  'Template String Expression':
+    'prefix': 'template'
+    'body': '{`${1:string}${${2:expression}}${3:string}`}'
+
+  'Astro Component with Style':
+    'prefix': 'astro-styled'
+    'body': """
+    ---
+    ${1:// Imports and props}
+    ---
+
+    <div>
+      ${2:<!-- Component content -->}
+    </div>
+
+    <style>
+      ${3:/* Component styles */}
+    </style>
+    """
+
+  'Client Directive':
+    'prefix': 'client'
+    'body': 'client:${1|load,idle,visible,media,only|}'

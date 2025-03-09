@@ -18,6 +18,9 @@
     'include': '#html-tag'
   },
   {
+    'include': '#framework-components'
+  },
+  {
     'include': 'text.html.basic'
   }
 ]
@@ -63,13 +66,76 @@
       { 'include': '#jsx-expression-inside-tags' }
     ]
 
+  'framework-components':
+    'patterns': [
+      # React/Preact component detection
+      {
+        'begin': '(<)([A-Z][\\w\\.]*\\.jsx|[A-Z][\\w\\.]*\\.tsx)'
+        'beginCaptures':
+          '1': 'name': 'punctuation.definition.tag.begin.astro'
+          '2': 'name': 'entity.name.tag.component.react.astro'
+        'end': '(/?>)'
+        'endCaptures':
+          '1': 'name': 'punctuation.definition.tag.end.astro'
+        'patterns': [
+          { 'include': 'source.js.jsx' }
+          { 'include': '#tag-attributes' }
+        ]
+      },
+      # Svelte component detection
+      {
+        'begin': '(<)([A-Z][\\w\\.]*\\.svelte)'
+        'beginCaptures':
+          '1': 'name': 'punctuation.definition.tag.begin.astro'
+          '2': 'name': 'entity.name.tag.component.svelte.astro'
+        'end': '(/?>)'
+        'endCaptures':
+          '1': 'name': 'punctuation.definition.tag.end.astro'
+        'patterns': [
+          { 'include': '#tag-attributes' }
+          { 'include': '#jsx-expression-inside-tags' }
+        ]
+      },
+      # Vue component detection
+      {
+        'begin': '(<)([A-Z][\\w\\.]*\\.vue)'
+        'beginCaptures':
+          '1': 'name': 'punctuation.definition.tag.begin.astro'
+          '2': 'name': 'entity.name.tag.component.vue.astro'
+        'end': '(/?>)'
+        'endCaptures':
+          '1': 'name': 'punctuation.definition.tag.end.astro'
+        'patterns': [
+          { 'include': '#tag-attributes' }
+          { 'include': '#jsx-expression-inside-tags' }
+        ]
+      }
+    ]
+
   'tag-attributes':
     'patterns': [
+      {
+        'include': '#directives'
+      },
       {
         'include': '#jsx-attribute'
       },
       {
         'include': '#html-attribute'
+      }
+    ]
+
+  'directives':
+    'patterns': [
+      # Client directives - https://docs.astro.build/en/reference/directives-reference/
+      {
+        'match': '(client:load|client:idle|client:visible|client:media|client:only|client:visible)'
+        'name': 'keyword.control.directive.astro'
+      },
+      # Outros diretivas
+      {
+        'match': '(transition:animate|transition:name|transition:persist)'
+        'name': 'keyword.control.directive.astro'
       }
     ]
 
@@ -87,7 +153,7 @@
 
   'html-attribute':
     'name': 'meta.attribute.html.astro'
-    'match': '([a-zA-Z0-9_-]+)(?:\\s*(=)\\s*(?:(")([^"]*)(")|(\')([^\']*)(\')|([^\\s>]+)))?'
+    'match': '([a-zA-Z0-9_:-]+)(?:\\s*(=)\\s*(?:(")([^"]*)(")|(\')([^\']*)(\')|([^\\s>]+)))?'
     'captures':
       '1': 'name': 'entity.other.attribute-name.astro'
       '2': 'name': 'punctuation.separator.key-value.astro'
@@ -113,10 +179,10 @@
 
   'jsx-expression-inside-tags':
     'name': 'meta.embedded.expression.tag.attribute.astro'
-    'begin': '(class|className)\\s*=\\s*{`'
+    'begin': '(class|className|style)\\s*=\\s*{`'
     'beginCaptures':
-      '0': 'name': 'meta.attribute-with-value.class.html'
-      '1': 'name': 'entity.other.attribute-name.class.html'
+      '0': 'name': 'meta.attribute-with-value.html'
+      '1': 'name': 'entity.other.attribute-name.html'
     'end': '`}'
     'endCaptures':
       '0': 'name': 'meta.embedded.expression.end.astro'
