@@ -3,218 +3,401 @@
 'fileTypes': ['astro']
 'patterns': [
   {
+    'include': '#scope'
+  },
+  {
     'include': '#frontmatter'
   },
   {
-    'include': '#jsx-expression-inside-tags'
-  },
-  {
-    'include': '#jsx-conditional-operators'
-  },
-  {
-    'include': '#jsx-expression'
-  },
-  {
-    'include': '#component-tag'
-  },
-  {
-    'include': '#html-tag'
-  },
-  {
-    'include': '#framework-components'
-  },
-  {
-    'include': 'text.html.basic'
+    'include': '#text'
   }
 ]
 
 'repository':
   'frontmatter':
-    'name': 'meta.frontmatter.astro'
-    'begin': '\\A---'
+    'begin': '\\A(-{3})\\s*$'
+    'end': '(^|\\G)(-{3})|\\.\\.\\.$'
     'beginCaptures':
-      '0': 'name': 'punctuation.definition.frontmatter.begin.astro'
-    'end': '^---'
+      '1':
+        'name': 'comment'
     'endCaptures':
-      '0': 'name': 'punctuation.definition.frontmatter.end.astro'
+      '2':
+        'name': 'comment'
+    'contentName': 'source.ts'
     'patterns': [
       { 'include': 'source.ts' }
     ]
 
-  'object-key':
-    'match': '([a-zA-Z_$][\\w$]*)\\s*(?=:)'
-    'name': 'variable.other.property.js'
-
-  'component-tag':
-    'name': 'meta.tag.component.astro'
-    'begin': '(<)([A-Z][\\w\\.]*)'
-    'beginCaptures':
-      '1': 'name': 'punctuation.definition.tag.begin.astro'
-      '2': 'name': 'entity.name.tag.component.astro'
-    'end': '(/?>)'
-    'endCaptures':
-      '1': 'name': 'punctuation.definition.tag.end.astro'
+  'scope':
     'patterns': [
-      { 'include': '#tag-attributes' }
-      { 'include': '#jsx-expression-inside-tags' }
+      { 'include': '#comments' }
+      { 'include': '#tags' }
+      { 'include': '#interpolation' }
+      { 'include': '#entities' }
     ]
 
-  'html-tag':
-    'name': 'meta.tag.html.astro'
-    'begin': '(<)([a-z][\\w\\.\\-]*)'
-    'beginCaptures':
-      '1': 'name': 'punctuation.definition.tag.begin.astro'
-      '2': 'name': 'entity.name.tag.html.astro'
-    'end': '(/?>)'
-    'endCaptures':
-      '1': 'name': 'punctuation.definition.tag.end.astro'
-    'patterns': [
-      { 'include': '#tag-attributes' }
-      { 'include': '#jsx-expression-inside-tags' }
-    ]
-
-  'framework-components':
-    'patterns': [
-      # React/Preact component detection
-      {
-        'begin': '(<)([A-Z][\\w\\.]*\\.jsx|[A-Z][\\w\\.]*\\.tsx)'
-        'beginCaptures':
-          '1': 'name': 'punctuation.definition.tag.begin.astro'
-          '2': 'name': 'entity.name.tag.component.react.astro'
-        'end': '(/?>)'
-        'endCaptures':
-          '1': 'name': 'punctuation.definition.tag.end.astro'
-        'patterns': [
-          { 'include': 'source.js.jsx' }
-          { 'include': '#tag-attributes' }
-        ]
-      },
-      # Svelte component detection
-      {
-        'begin': '(<)([A-Z][\\w\\.]*\\.svelte)'
-        'beginCaptures':
-          '1': 'name': 'punctuation.definition.tag.begin.astro'
-          '2': 'name': 'entity.name.tag.component.svelte.astro'
-        'end': '(/?>)'
-        'endCaptures':
-          '1': 'name': 'punctuation.definition.tag.end.astro'
-        'patterns': [
-          { 'include': '#tag-attributes' }
-          { 'include': '#jsx-expression-inside-tags' }
-        ]
-      },
-      # Vue component detection
-      {
-        'begin': '(<)([A-Z][\\w\\.]*\\.vue)'
-        'beginCaptures':
-          '1': 'name': 'punctuation.definition.tag.begin.astro'
-          '2': 'name': 'entity.name.tag.component.vue.astro'
-        'end': '(/?>)'
-        'endCaptures':
-          '1': 'name': 'punctuation.definition.tag.end.astro'
-        'patterns': [
-          { 'include': '#tag-attributes' }
-          { 'include': '#jsx-expression-inside-tags' }
-        ]
-      }
-    ]
-
-  'tag-attributes':
-    'patterns': [
-      {
-        'include': '#directives'
-      },
-      {
-        'include': '#jsx-attribute'
-      },
-      {
-        'include': '#html-attribute'
-      }
-    ]
-
-  'directives':
-    'patterns': [
-      # Client directives - https://docs.astro.build/en/reference/directives-reference/
-      {
-        'match': '(client:load|client:idle|client:visible|client:media|client:only|client:visible)'
-        'name': 'keyword.control.directive.astro'
-      },
-      # Altri direttive
-      {
-        'match': '(transition:animate|transition:name|transition:persist)'
-        'name': 'keyword.control.directive.astro'
-      }
-    ]
-
-  'jsx-conditional-operators':
-    'patterns': [
-      {
-        'match': '&&(?!\\=)|\\|\\|(?!\\=)|\\?\\s*(?!\\=)|\\:(?!\\=)'
-        'name': 'keyword.operator.logical.js'
-      }
-    ]
-
-  'jsx-attribute':
-    'name': 'meta.attribute.jsx.astro'
-    'begin': '\\{'
-    'beginCaptures':
-      '0': 'name': 'punctuation.section.embedded.begin.astro'
-    'end': '\\}'
-    'endCaptures':
-      '0': 'name': 'punctuation.section.embedded.end.astro'
-    'patterns': [
-      { 'include': '#jsx-conditional-operators' }
-      { 'include': '#object-key' }
-      { 'include': 'source.js.jsx' }
-    ]
-
-  'html-attribute':
-    'name': 'meta.attribute.html.astro'
-    'match': '([a-zA-Z0-9_:-]+)(?:\\s*(=)\\s*(?:(")([^"]*)(")|(\')([^\']*)(\')|([^\\s>]+)))?'
+  'comments':
+    'begin': '<!--'
+    'end': '-->'
     'captures':
-      '1': 'name': 'entity.other.attribute-name.astro'
-      '2': 'name': 'punctuation.separator.key-value.astro'
-      '3': 'name': 'punctuation.definition.string.begin.astro'
-      '4': 'name': 'string.quoted.double.astro'
-      '5': 'name': 'punctuation.definition.string.end.astro'
-      '6': 'name': 'punctuation.definition.string.begin.astro'
-      '7': 'name': 'string.quoted.single.astro'
-      '8': 'name': 'punctuation.definition.string.end.astro'
-      '9': 'name': 'string.unquoted.astro'
-
-  'jsx-expression':
-    'name': 'meta.embedded.expression.astro'
-    'begin': '{(?!\\s*\/\*|\\s*\/\/)'
-    'beginCaptures':
-      '0': 'name': 'punctuation.section.embedded.begin.astro'
-    'end': '}'
-    'endCaptures':
-      '0': 'name': 'punctuation.section.embedded.end.astro'
+      '0':
+        'name': 'punctuation.definition.comment.astro'
+    'name': 'comment.block.astro'
     'patterns': [
-      { 'include': '#jsx-conditional-operators' }
-      { 'include': '#object-key' }
-      { 'include': 'source.js.jsx' }
+      {
+        'match': '\\G-?>|<!--(?!>)|<!-(?=-->)|--!>'
+        'name': 'invalid.illegal.characters-not-allowed-here.astro'
+      }
     ]
 
-  'jsx-expression-inside-tags':
-    'name': 'meta.embedded.expression.tag.attribute.astro'
-    'begin': '(class|className|style)\\s*=\\s*{`'
-    'beginCaptures':
-      '0': 'name': 'meta.attribute-with-value.html'
-      '1': 'name': 'entity.other.attribute-name.html'
-    'end': '`}'
-    'endCaptures':
-      '0': 'name': 'meta.embedded.expression.end.astro'
+  'interpolation':
     'patterns': [
       {
-        'match': '\\${([^}]*)}'
-        'name': 'meta.template.expression.js'
+        'begin': '\\{'
+        'end': '\\}'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.section.embedded.begin.astro'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.section.embedded.end.astro'
+        'contentName': 'meta.embedded.expression.astro source.tsx'
+        'patterns': [
+          {
+            'begin': '\\G\\s*(?={)'
+            'end': '(?<=})'
+            'patterns': [
+              { 'include': 'source.tsx#object-literal' }
+            ]
+          },
+          { 'include': 'source.tsx' }
+        ]
+      }
+    ]
+
+  'entities':
+    'patterns': [
+      {
         'captures':
-          '0': 'name': 'entity.name.tag.js'
-          '1': 'name': 'source.js.jsx'
+          '1':
+            'name': 'punctuation.definition.entity.astro'
+          '3':
+            'name': 'punctuation.definition.entity.astro'
+        'match': '(&)#[0-9]+(;)'
+        'name': 'constant.character.entity.numeric.decimal.astro'
       },
       {
-        'match': '[^${}]+'
-        'name': 'string.template.js'
+        'captures':
+          '1':
+            'name': 'punctuation.definition.entity.astro'
+          '3':
+            'name': 'punctuation.definition.entity.astro'
+        'match': '(&)#[xX][0-9a-fA-F]+(;)'
+        'name': 'constant.character.entity.numeric.hexadecimal.astro'
+      }
+    ]
+
+  'attributes':
+    'patterns': [
+      { 'include': '#attributes-events' }
+      { 'include': '#attributes-keyvalue' }
+      { 'include': '#attributes-interpolated' }
+    ]
+
+  'attributes-events':
+    'begin': '(on(s(croll|t(orage|alled)|u(spend|bmit)|e(curitypolicyviolation|ek(ing|ed)|lect))|hashchange|c(hange|o(ntextmenu|py)|u(t|echange)|l(ick|ose)|an(cel|play(through)?))|t(imeupdate|oggle)|in(put|valid)|o(nline|ffline)|d(urationchange|r(op|ag(start|over|e(n(ter|d)|xit)|leave)?)|blclick)|un(handledrejection|load)|p(opstate|lay(ing)?|a(ste|use|ge(show|hide))|rogress)|e(nded|rror|mptied)|volumechange|key(down|up|press)|focus|w(heel|aiting)|l(oad(start|e(nd|d(data|metadata)))?|anguagechange)|a(uxclick|fterprint|bort)|r(e(s(ize|et)|jectionhandled)|atechange)|m(ouse(o(ut|ver)|down|up|enter|leave|move)|essage(error)?)|b(efore(unload|print)|lur)))(?![\\w:-])'
+    'beginCaptures':
+      '0':
+        'patterns': [
+          {
+            'match': '.*'
+            'name': 'entity.other.attribute-name.astro'
+          }
+        ]
+    'end': '(?=\\s*+[^=\\s])'
+    'name': 'meta.attribute.$1.astro'
+    'patterns': [
+      {
+        'begin': '='
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.separator.key-value.astro'
+        'end': '(?<=[^\\s=])(?!\\s*=)|(?=/?>)'
+        'patterns': [
+          { 'include': '#interpolation' }
+          { 'include': '#attribute-literal' }
+          {
+            'begin': '(?=[^\\s=<>`/]|/(?!>))'
+            'end': '(?!\\G)'
+            'name': 'meta.embedded.line.js'
+            'patterns': [
+              {
+                'match': '(([^\\s\\"\'=<>`/]|/(?!>))+)'
+                'name': 'string.unquoted.astro'
+                'captures':
+                  '0':
+                    'name': 'source.js'
+                  '1':
+                    'patterns': [
+                      { 'include': 'source.js' }
+                    ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+
+  'attributes-interpolated':
+    'begin': '(?<!:|=)\\s*({)'
+    'end': '(\\})'
+    'contentName': 'meta.embedded.expression.astro source.tsx'
+    'patterns': [
+      { 'include': 'source.tsx' }
+    ]
+
+  'attributes-keyvalue':
+    'begin': '([_@$[:alpha:]][:._\\-$[:alnum:]]*)'
+    'beginCaptures':
+      '0':
+        'patterns': [
+          {
+            'match': '.*'
+            'name': 'entity.other.attribute-name.astro'
+          }
+        ]
+    'end': '(?=\\s*+[^=\\s])'
+    'name': 'meta.attribute.$1.astro'
+    'patterns': [
+      {
+        'begin': '='
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.separator.key-value.astro'
+        'end': '(?<=[^\\s=])(?!\\s*=)|(?=/?>)'
+        'patterns': [
+          { 'include': '#attributes-value' }
+        ]
+      }
+    ]
+
+  'attribute-literal':
+    'begin': '(`)'
+    'end': '\\1'
+    'name': 'string.template.astro'
+    'patterns': [
+      { 'include': 'source.tsx#template-substitution-element' }
+      { 'include': 'source.tsx#string-character-escape' }
+    ]
+
+  'attributes-value':
+    'patterns': [
+      { 'include': '#interpolation' }
+      {
+        'match': '([^\\s"\'=<>`/]|/(?!>))+'
+        'name': 'string.unquoted.astro'
+      },
+      {
+        'begin': '([\'"])'
+        'end': '\\1'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.astro'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.astro'
+        'name': 'string.quoted.astro'
+      },
+      { 'include': '#attribute-literal' }
+    ]
+
+  'tags':
+    'patterns': [
+      { 'include': '#tags-raw' }
+      { 'include': '#tags-lang' }
+      { 'include': '#tags-void' }
+      { 'include': '#tags-general-end' }
+      { 'include': '#tags-general-start' }
+    ]
+
+  'tags-name':
+    'patterns': [
+      {
+        'match': '[A-Z][a-zA-Z0-9_]*'
+        'name': 'support.class.component.astro'
+      },
+      {
+        'match': '[a-z][\\w0-9:]*-[\\w0-9:-]*'
+        'name': 'meta.tag.custom.astro entity.name.tag.astro'
+      },
+      {
+        'match': '[a-z][\\w0-9:-]*'
+        'name': 'entity.name.tag.astro'
+      }
+    ]
+
+  'tags-start-attributes':
+    'begin': '\\G'
+    'end': '(?=/?>)'
+    'name': 'meta.tag.start.astro'
+    'patterns': [
+      { 'include': '#attributes' }
+    ]
+
+  'tags-lang-start-attributes':
+    'begin': '\\G'
+    'end': '(?=/>)|>'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.tag.end.astro'
+    'name': 'meta.tag.start.astro'
+    'patterns': [
+      { 'include': '#attributes' }
+    ]
+
+  'tags-start-node':
+    'match': '(<)([^/\\s>/]*)'
+    'captures':
+      '1':
+        'name': 'punctuation.definition.tag.begin.astro'
+      '2':
+        'patterns': [
+          { 'include': '#tags-name' }
+        ]
+    'name': 'meta.tag.start.astro'
+
+  'tags-end-node':
+    'match': '(</)(.*?)\\s*(>)|(/>)'
+    'captures':
+      '1':
+        'name': 'meta.tag.end.astro punctuation.definition.tag.begin.astro'
+      '2':
+        'name': 'meta.tag.end.astro'
+        'patterns': [
+          { 'include': '#tags-name' }
+        ]
+      '3':
+        'name': 'meta.tag.end.astro punctuation.definition.tag.end.astro'
+      '4':
+        'name': 'meta.tag.start.astro punctuation.definition.tag.end.astro'
+
+  'tags-raw':
+    'begin': '<([^/?!\\s<>]+)(?=[^>]+is:raw).*?'
+    'beginCaptures':
+      '0':
+        'patterns': [
+          { 'include': '#tags-start-node' }
+        ]
+    'end': '</\\1\\s*>|/>'
+    'endCaptures':
+      '0':
+        'patterns': [
+          { 'include': '#tags-end-node' }
+        ]
+    'name': 'meta.scope.tag.$1.astro meta.raw.astro'
+    'contentName': 'source.unknown'
+    'patterns': [
+      { 'include': '#tags-lang-start-attributes' }
+    ]
+
+  'tags-lang':
+    'begin': '<(script|style)'
+    'end': '</\\1\\s*>|/>'
+    'beginCaptures':
+      '0':
+        'patterns': [
+          { 'include': '#tags-start-node' }
+        ]
+    'endCaptures':
+      '0':
+        'patterns': [
+          { 'include': '#tags-end-node' }
+        ]
+    'name': 'meta.scope.tag.$1.astro meta.$1.astro'
+    'patterns': [
+      {
+        'begin': '\\G(?=\\s*[^>]*?(type|lang)\\s*=\\s*([\'"]|)(?:text\\/)?(application\\/ld\\+json)\\2)'
+        'end': '(?=</|/>)'
+        'name': 'meta.lang.json.astro'
+        'patterns': [
+          { 'include': '#tags-lang-start-attributes' }
+        ]
+      },
+      {
+        'begin': '\\G(?=\\s*[^>]*?(type|lang)\\s*=\\s*([\'"]|)(module)\\2)'
+        'end': '(?=</|/>)'
+        'name': 'meta.lang.javascript.astro'
+        'patterns': [
+          { 'include': '#tags-lang-start-attributes' }
+        ]
+      },
+      {
+        'begin': '\\G(?=\\s*[^>]*?(type|lang)\\s*=\\s*([\'"]|)(?:text/|application/)?([\\w\\/+]+)\\2)'
+        'end': '(?=</|/>)'
+        'name': 'meta.lang.$3.astro'
+        'patterns': [
+          { 'include': '#tags-lang-start-attributes' }
+        ]
+      },
+      { 'include': '#tags-lang-start-attributes' }
+    ]
+
+  'tags-void':
+    'begin': '(<)(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)(?=\\s|/?>)'
+    'beginCaptures':
+      '1':
+        'name': 'punctuation.definition.tag.begin.astro'
+      '2':
+        'name': 'entity.name.tag.astro'
+    'end': '/?>',
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.tag.begin.astro'
+    'name': 'meta.tag.void.astro'
+    'patterns': [
+      { 'include': '#attributes' }
+    ]
+
+  'tags-general-start':
+    'begin': '(<)([^/\\s>/]*)'
+    'end': '(/?>)'
+    'beginCaptures':
+      '0':
+        'patterns': [
+          { 'include': '#tags-start-node' }
+        ]
+    'endCaptures':
+      '1':
+        'name': 'meta.tag.start.astro punctuation.definition.tag.end.astro'
+    'name': 'meta.scope.tag.$2.astro'
+    'patterns': [
+      { 'include': '#tags-start-attributes' }
+    ]
+
+  'tags-general-end':
+    'begin': '(</)([^/\\s>]*)'
+    'end': '(>)'
+    'beginCaptures':
+      '1':
+        'name': 'meta.tag.end.astro punctuation.definition.tag.begin.astro'
+      '2':
+        'name': 'meta.tag.end.astro'
+        'patterns': [
+          { 'include': '#tags-name' }
+        ]
+    'endCaptures':
+      '1':
+        'name': 'meta.tag.end.astro punctuation.definition.tag.end.astro'
+    'name': 'meta.scope.tag.$2.astro'
+
+  'text':
+    'patterns': [
+      {
+        'begin': '(?<=^|---|>|})'
+        'end': '(?=<|{|$)'
+        'name': 'text.astro'
+        'patterns': [
+          { 'include': '#entities' }
+        ]
       }
     ]
